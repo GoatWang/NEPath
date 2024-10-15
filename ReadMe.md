@@ -1,3 +1,38 @@
+# Mac Modification:
+1. remove all `register` keyword (depreciated in c++11, disabled in C++17)
+2. comment out zigzag functions: `NEPath-master/NEPathPlanner.cpp`, `NEPath-master/NEPathPlanner.h`, `DirectionParallel.cpp`, `DirectionParallel.h`, `demo.cpp`, `demo.h`
+3. Change sort input in `DirectionParallel.cpp`
+	```cpp
+	sort(intersection.data(), intersection.data() + intersection.size(), cmp_Raster);
+	=> 
+	sort(intersection.begin(), intersection.end(), cmp_Raster);
+	```
+4. remove `inline` for these two functions
+	```cpp
+	cInt ContourParallel::double2cInt(const double& d, double scale, double delta_pos/*=0.0*/)
+	double ContourParallel::cInt2double(const cInt& c, double scale, double delta_pos/*=0.0*/)
+	```
+5. add const to comparator function in `DirectionParallel.cpp`
+	```cpp
+		struct InterPoint {
+			IntPoint point;
+			unsigned int idpath;
+			unsigned int idpoint;
+			InterPoint(cInt x, cInt y, unsigned int path, unsigned int point) :
+				point(IntPoint(x, y)), idpath(path), idpoint(point) {}
+			bool operator < (const InterPoint& p) const { // original no const: `bool operator < (const InterPoint& p) { `
+				return DirectionParalle::cmp_Raster(this->point, p.point);
+			}
+			static bool nextto(const InterPoint& a, const InterPoint& b, int size) {
+				// a and b is on the same continuous boundary and adjacent
+				return (a.idpath == b.idpath) && ((a.idpoint == (b.idpoint + 1) % size) || (b.idpoint == (a.idpoint + 1) % size));
+			}
+		};
+	```
+6. cahnge `FileAgent.cpp` to be used on Linux.
+7. change `demo_Raster();` to `demo_CP();`  in `demo.cpp`
+
+
 # NEPath
 
 ## A Classical Toolpath and Optimization-Based Non-Equidistant Toolpath Planning Library (In C++)

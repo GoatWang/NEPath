@@ -34,3 +34,7 @@
 # visual studio
 .vs/
 x64/
+
+.vscode/
+build
+pathvisualizaer/paths/
