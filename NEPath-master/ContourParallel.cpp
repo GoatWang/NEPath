@@ -27,6 +27,9 @@ paths ContourParallel::OffsetClipper(const double* x, const double* y, double di
 		contour << IntPoint(double2cInt(x[i], scale, delta_x), double2cInt(y[i], scale, delta_y));
 	}
 	contour << contour[0];
+
+	// jtRound: This is the join type, specifying how the corners should be handled. jtRound means that corners will be rounded.
+	// etClosedPolygon: This is the end type, indicating that the path is a closed polygon.
 	Paths solution;
 	ClipperOffset co;
 	co.AddPath(contour, jtRound, etClosedPolygon);
